@@ -1,0 +1,2 @@
+# script
+VS Code Theme
