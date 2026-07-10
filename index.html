@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#121212">
+  <meta name="description" content="An interactive semantic colour palette with CSS, SCSS, JSON, and CSV exports.">
   <title>Script — Palette Utility</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -38,10 +40,10 @@
           <option value="name">Tile click: Token name</option>
         </select>
 
-        <button class="tool-button" id="copyCss" type="button">Copy CSS</button>
-        <button class="tool-button" id="copyScss" type="button">Copy SCSS</button>
-        <button class="tool-button" id="copyJson" type="button">Copy JSON</button>
-        <button class="tool-button" id="copyCsv" type="button">Copy CSV</button>
+        <button class="tool-button" id="copyCss" type="button"><span class="copy-prefix">Copy </span>CSS</button>
+        <button class="tool-button" id="copyScss" type="button"><span class="copy-prefix">Copy </span>SCSS</button>
+        <button class="tool-button" id="copyJson" type="button"><span class="copy-prefix">Copy </span>JSON</button>
+        <button class="tool-button" id="copyCsv" type="button"><span class="copy-prefix">Copy </span>CSV</button>
       </div>
 
       <div class="utility-right">

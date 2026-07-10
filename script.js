@@ -127,20 +127,34 @@ function swatch(name, hex, extraClass = "") {
 
 function render() {
   const familyHeader = `
-    <div class="family-row" aria-hidden="true">
-      <div class="family-cell empty"></div>
+    <div class="family-row">
+      <div class="family-cell empty" aria-hidden="true"></div>
       ${families.map(family => `<div class="family-cell">${family.name}</div>`).join("")}
     </div>
   `;
 
   const matrixRows = rowNames.map((rowName, rowIndex) => `
-    <div class="matrix-row">
+    <div class="matrix-row" aria-label="${rowName} role">
       <div class="row-label">${rowName}</div>
       ${families.map(family => {
         const [name, hex] = family.colors[rowIndex];
         return swatch(name, hex, "script-swatch");
       }).join("")}
     </div>
+  `).join("");
+
+  const mobileRows = families.map(family => `
+    <section class="mobile-family" aria-labelledby="mobile-${family.name.toLowerCase()}">
+      <h3 class="mobile-family-name" id="mobile-${family.name.toLowerCase()}">${family.name}</h3>
+      <div class="mobile-role-row">
+        ${family.colors.map(([name, hex], index) => `
+          <div class="mobile-role">
+            <span class="mobile-role-name">${rowNames[index]}</span>
+            ${swatch(name, hex, "script-swatch")}
+          </div>
+        `).join("")}
+      </div>
+    </section>
   `).join("");
 
   board.innerHTML = `
@@ -161,9 +175,12 @@ function render() {
       </div>
 
       <div class="matrix-wrap">
-        <div class="matrix">
+        <div class="matrix desktop-matrix" aria-label="Colours by role and family">
           ${familyHeader}
           ${matrixRows}
+        </div>
+        <div class="mobile-matrix" aria-label="Colour families with core, bright, and character roles">
+          ${mobileRows}
         </div>
       </div>
     </section>
@@ -208,9 +225,10 @@ async function copyText(text) {
 }
 
 let toastTimer;
-function showToast(message) {
+function showToast(message, isError = false) {
   clearTimeout(toastTimer);
   toast.textContent = message;
+  toast.classList.toggle("error", isError);
   toast.classList.add("show");
   toastTimer = setTimeout(() => toast.classList.remove("show"), 1500);
 }
@@ -227,9 +245,10 @@ board.addEventListener("click", async event => {
   else output = formatColor(name, hex, copyFormat.value);
 
   if (await copyText(output)) showToast(`Copied ${output}`);
+  else showToast("Couldn’t copy — please copy manually", true);
 });
 
-function groupedLines(prefix, suffix) {
+function groupedLines(format) {
   const sections = [
     ["Dark neutrals", darkNeutrals],
     ["Script palette", families.flatMap(family => family.colors)],
@@ -237,23 +256,24 @@ function groupedLines(prefix, suffix) {
   ];
 
   return sections.map(([title, colors]) => {
-    const comment = prefix === "$" ? `// ${title}` : `  /* ${title} */`;
+    const isScss = format === "scss";
+    const comment = isScss ? `// ${title}` : `  /* ${title} */`;
     const lines = colors.map(([name, hex]) =>
-      prefix === "$"
+      isScss
         ? `$${name}: ${hex};`
         : `  --${name}: ${hex};`
     ).join("\n");
 
     return `${comment}\n${lines}`;
-  }).join("\n\n") + suffix;
+  }).join("\n\n");
 }
 
 function cssExport() {
-  return `:root {\n${groupedLines("--", "\n}")}`.replaceAll("  ----", "  --");
+  return `:root {\n${groupedLines("css")}\n}`;
 }
 
 function scssExport() {
-  return groupedLines("$", "\n");
+  return `${groupedLines("scss")}\n`;
 }
 
 function jsonExport() {
@@ -280,17 +300,24 @@ async function copyExport(type) {
   }[type];
 
   if (await copyText(output)) showToast(`Copied complete ${type.toUpperCase()} palette`);
+  else showToast("Couldn’t copy — please copy manually", true);
 }
 
 function downloadCss() {
-  const blob = new Blob([cssExport()], { type: "text/css;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "script-theme.css";
-  link.click();
-  URL.revokeObjectURL(url);
-  showToast("Downloaded script-theme.css");
+  try {
+    const blob = new Blob([cssExport()], { type: "text/css;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "script-theme.css";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+    showToast("Downloaded script-theme.css");
+  } catch {
+    showToast("Couldn’t download the CSS file", true);
+  }
 }
 
 document.getElementById("copyCss").addEventListener("click", () => copyExport("css"));
@@ -306,7 +333,11 @@ const themeIcon = document.getElementById("themeIcon");
 
 function applyTheme(theme) {
   root.dataset.theme = theme;
-  localStorage.setItem("script-preview-theme", theme);
+  try {
+    localStorage.setItem("script-preview-theme", theme);
+  } catch {
+    // Theme preview still works when storage is unavailable.
+  }
 
   const isDark = theme === "dark";
   themeText.textContent = isDark ? "Light preview" : "Dark preview";
@@ -319,7 +350,12 @@ themeToggle.addEventListener("click", () => {
   applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
 });
 
-const storedTheme = localStorage.getItem("script-preview-theme");
+let storedTheme;
+try {
+  storedTheme = localStorage.getItem("script-preview-theme");
+} catch {
+  storedTheme = null;
+}
 if (storedTheme === "light" || storedTheme === "dark") applyTheme(storedTheme);
 
 document.getElementById("count").textContent = `${allColors.length} colours`;
