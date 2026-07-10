@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#121212">
+  <title>Script — Palette Utility</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">K2E7 / Theme Utility</p>
+        <h1>Script</h1>
+        <p class="description">
+          A semantic 6 × 3 colour system. Read it vertically by family:
+          red, yellow, green, cyan, blue, and purple. The rows move from core
+          to bright to character shades.
+        </p>
+      </div>
+
+      <button class="theme-toggle" id="themeToggle" type="button">
+        <span id="themeIcon">☀</span>
+        <span id="themeText">Light preview</span>
+      </button>
+    </header>
+
+    <section class="utility" aria-label="Palette utility controls">
+      <div class="utility-left">
+        <select id="copyFormat" aria-label="Tile copy format">
+          <option value="hex">Tile click: Hex only</option>
+          <option value="css">Tile click: CSS variable</option>
+          <option value="scss">Tile click: SCSS variable</option>
+          <option value="json">Tile click: JSON property</option>
+          <option value="name">Tile click: Token name</option>
+        </select>
+
+        <button class="tool-button" id="copyCss" type="button">Copy CSS</button>
+        <button class="tool-button" id="copyScss" type="button">Copy SCSS</button>
+        <button class="tool-button" id="copyJson" type="button">Copy JSON</button>
+        <button class="tool-button" id="copyCsv" type="button">Copy CSV</button>
+      </div>
+
+      <div class="utility-right">
+        <button class="tool-button primary" id="downloadCss" type="button">Download CSS</button>
+        <span class="count" id="count">30 colours</span>
+      </div>
+    </section>
+
+    <section class="board" id="paletteBoard" aria-label="Script colour palette"></section>
+
+    <div class="footer-note">
+      <span>
+        Click copies the selected format · <kbd>Shift</kbd> + click copies token + hex ·
+        <kbd>Alt</kbd> + click copies token only
+      </span>
+      <span>Suggested added dark neutral: <strong>#242424</strong></span>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js" defer></script>
+</body>
+
+</html>
