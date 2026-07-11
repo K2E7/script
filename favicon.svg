@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="15" fill="#121212"/>
-  <path d="M43 18c-4-3-9-5-14-5-8 0-14 5-14 12 0 8 7 10 13 12 5 2 8 3 8 7 0 3-3 5-7 5-5 0-10-2-14-6l-5 7c5 5 12 8 19 8 10 0 17-6 17-15 0-8-6-11-14-14-4-1-7-2-7-5 0-2 2-4 6-4 3 0 7 1 10 4z" fill="#87C0FF"/>
+  <rect width="64" height="64" rx="12" fill="#E4E0D8"/>
+
+  <!-- Simplified from the tall reference mark for clarity at favicon sizes. -->
+  <g fill="none" stroke="#323232" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M11 9H53" stroke-width="7"/>
+    <path d="M32 10V17L52 35 32 54 12 35 32 17" stroke-width="6"/>
+    <path d="M32 54V59" stroke-width="6"/>
+  </g>
+
+  <path d="M32 26 41 35 32 44 23 35Z" fill="#E4E0D8"/>
+  <path d="m28 29-6 6 6 6v-3h8v3l6-6-6-6v3h-8Z" fill="#323232"/>
 </svg>
