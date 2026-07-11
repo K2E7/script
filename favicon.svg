@@ -1,13 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#E4E0D8"/>
+  <defs>
+    <linearGradient id="core-gradient" gradientUnits="userSpaceOnUse" x1="5" y1="0" x2="59" y2="0">
+      <stop offset="0%" stop-color="#AB5960"/>
+      <stop offset="20%" stop-color="#C19C00"/>
+      <stop offset="40%" stop-color="#566F56"/>
+      <stop offset="60%" stop-color="#2C7385"/>
+      <stop offset="80%" stop-color="#5A7BAB"/>
+      <stop offset="100%" stop-color="#765598"/>
+    </linearGradient>
+  </defs>
 
-  <!-- Simplified from the tall reference mark for clarity at favicon sizes. -->
-  <g fill="none" stroke="#323232" stroke-linecap="square" stroke-linejoin="miter">
-    <path d="M11 9H53" stroke-width="7"/>
-    <path d="M32 10V17L52 35 32 54 12 35 32 17" stroke-width="6"/>
-    <path d="M32 54V59" stroke-width="6"/>
-  </g>
+  <path
+    d="M32 6 58 32 32 58 6 32Z"
+    fill="none"
+    stroke="url(#core-gradient)"
+    stroke-width="7"
+    stroke-linejoin="miter"
+  />
 
-  <path d="M32 26 41 35 32 44 23 35Z" fill="#E4E0D8"/>
-  <path d="m28 29-6 6 6 6v-3h8v3l6-6-6-6v3h-8Z" fill="#323232"/>
+  <path
+    d="m28 29-6 6 6 6v-3h8v3l6-6-6-6v3h-8Z"
+    fill="url(#core-gradient)"
+    transform="translate(32 32) scale(1.35) translate(-32 -35)"
+  />
 </svg>
