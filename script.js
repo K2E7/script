@@ -71,9 +71,8 @@ const rowNames = ["Core", "Bright", "Character"];
 
 // Pick once per page load. Theme changes reuse this family and swap its roles.
 const accentFamily = families[Math.floor(Math.random() * families.length)];
-const ambientDuration = 17 + Math.random() * 8;
-const ambientDelay = -Math.random() * ambientDuration;
-const ambientDirection = Math.random() < 0.5 ? "alternate" : "alternate-reverse";
+const ambientOneDuration = 19 + Math.random() * 7;
+const ambientTwoDuration = 21 + Math.random() * 8;
 
 const allColors = [
   ...darkNeutrals.map(([name, hex]) => ({ group: "dark", name, hex })),
@@ -370,9 +369,10 @@ const themeText = document.getElementById("themeText");
 const themeIcon = document.getElementById("themeIcon");
 const wordmarkLetters = document.querySelectorAll(".wordmark-letter");
 
-root.style.setProperty("--ambient-duration", `${ambientDuration.toFixed(2)}s`);
-root.style.setProperty("--ambient-delay", `${ambientDelay.toFixed(2)}s`);
-root.style.setProperty("--ambient-direction", ambientDirection);
+root.style.setProperty("--ambient-one-duration", `${ambientOneDuration.toFixed(2)}s`);
+root.style.setProperty("--ambient-one-delay", `${(-Math.random() * ambientOneDuration).toFixed(2)}s`);
+root.style.setProperty("--ambient-two-duration", `${ambientTwoDuration.toFixed(2)}s`);
+root.style.setProperty("--ambient-two-delay", `${(-Math.random() * ambientTwoDuration).toFixed(2)}s`);
 
 function applyWordmarkColors(theme) {
   const shadeIndex = theme === "dark" ? 1 : 0;

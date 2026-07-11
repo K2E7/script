@@ -1,29 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap');
-
-@property --glow-one-x {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 12%;
-}
-
-@property --glow-one-y {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 4%;
-}
-
-@property --glow-two-x {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 84%;
-}
-
-@property --glow-two-y {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 8%;
-}
-
 :root {
   color-scheme: dark;
 
@@ -128,7 +102,6 @@ body {
   font-weight: 400;
 }
 
-body::before,
 body::after {
   position: fixed;
   inset: 0;
@@ -137,16 +110,32 @@ body::after {
   pointer-events: none;
 }
 
-body::before {
-  background:
-    radial-gradient(circle at var(--glow-one-x) var(--glow-one-y), color-mix(in srgb, var(--ambient-character) 26%, transparent), transparent 25rem),
-    radial-gradient(circle at var(--glow-two-x) var(--glow-two-y), color-mix(in srgb, var(--ambient-neighbor) 24%, transparent), transparent 27rem);
-  animation: ambient-drift var(--ambient-duration) ease-in-out var(--ambient-delay) infinite var(--ambient-direction);
-  will-change: --glow-one-x, --glow-one-y, --glow-two-x, --glow-two-y;
-}
-
 body::after {
   background: var(--bg-overlay);
+}
+
+.ambient-glow {
+  position: fixed;
+  z-index: 0;
+  width: min(48rem, 78vmax);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.ambient-glow-one {
+  top: -24rem;
+  left: -22rem;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ambient-character) 26%, transparent), transparent 68%);
+  animation: ambient-one var(--ambient-one-duration, 21s) ease-in-out var(--ambient-one-delay, -4s) infinite alternate;
+}
+
+.ambient-glow-two {
+  top: -22rem;
+  right: -24rem;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ambient-neighbor) 24%, transparent), transparent 68%);
+  animation: ambient-two var(--ambient-two-duration, 24s) ease-in-out var(--ambient-two-delay, -8s) infinite alternate-reverse;
 }
 
 .app {
@@ -154,47 +143,39 @@ body::after {
   z-index: 1;
 }
 
-@keyframes ambient-drift {
+@keyframes ambient-one {
   0% {
-    --glow-one-x: 8%;
-    --glow-one-y: 2%;
-    --glow-two-x: 88%;
-    --glow-two-y: 8%;
+    transform: translate3d(0, 0, 0);
   }
 
-  18% {
-    --glow-one-x: 31%;
-    --glow-one-y: 19%;
-    --glow-two-x: 71%;
-    --glow-two-y: 34%;
+  35% {
+    transform: translate3d(38vw, 22vh, 0);
   }
 
-  39% {
-    --glow-one-x: 18%;
-    --glow-one-y: 54%;
-    --glow-two-x: 91%;
-    --glow-two-y: 59%;
-  }
-
-  61% {
-    --glow-one-x: 53%;
-    --glow-one-y: 76%;
-    --glow-two-x: 57%;
-    --glow-two-y: 21%;
-  }
-
-  82% {
-    --glow-one-x: 42%;
-    --glow-one-y: 32%;
-    --glow-two-x: 69%;
-    --glow-two-y: 78%;
+  70% {
+    transform: translate3d(16vw, 68vh, 0);
   }
 
   100% {
-    --glow-one-x: 12%;
-    --glow-one-y: 84%;
-    --glow-two-x: 86%;
-    --glow-two-y: 17%;
+    transform: translate3d(52vw, 42vh, 0);
+  }
+}
+
+@keyframes ambient-two {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  32% {
+    transform: translate3d(-44vw, 28vh, 0);
+  }
+
+  66% {
+    transform: translate3d(-18vw, 72vh, 0);
+  }
+
+  100% {
+    transform: translate3d(-58vw, 48vh, 0);
   }
 }
 
@@ -315,7 +296,7 @@ html[data-theme] h1::before {
   font-weight: 500;
   box-shadow: var(--shadow-soft);
   cursor: pointer;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
   white-space: nowrap;
 }
 
@@ -350,7 +331,7 @@ html[data-theme] h1::before {
   border-radius: 20px;
   background: color-mix(in srgb, var(--surface-solid) 78%, transparent);
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(10px);
 }
 
 .utility-left,
@@ -409,7 +390,6 @@ select {
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--surface-solid) 86%, transparent), color-mix(in srgb, var(--surface-solid) 58%, transparent));
   box-shadow: var(--shadow);
-  backdrop-filter: blur(22px);
   overflow: hidden;
 }
 
@@ -671,8 +651,9 @@ kbd {
     transform: none;
   }
 
-  body::before {
+  .ambient-glow {
     animation: none;
+    will-change: auto;
   }
 }
 
