@@ -44,7 +44,7 @@ html[data-theme="light"] {
   --surface: rgba(255, 251, 242, .72);
   --surface-solid: #FFFBF2;
   --surface-2: #E4E0D8;
-  --wordmark-bg: #E4E0D8;
+  --wordmark-bg: rgba(255, 251, 242, .54);
   --text: #1E1E1E;
   --muted: #6E6860;
   --soft: #56514B;
@@ -498,16 +498,14 @@ select {
   border-radius: var(--radius-lg);
   background: var(--swatch);
   color: var(--label);
-  box-shadow: 0 15px 36px rgba(0, 0, 0, .16);
+  box-shadow: none;
   cursor: pointer;
   isolation: isolate;
-  transition: transform .13s ease, box-shadow .18s ease, filter .18s ease;
+  transition: transform .13s ease;
 }
 
 .swatch:hover {
   transform: translateY(-4px);
-  box-shadow: 0 24px 46px rgba(0, 0, 0, .25);
-  filter: none;
 }
 
 .swatch:active {
