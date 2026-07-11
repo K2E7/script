@@ -69,6 +69,12 @@ const families = [
 
 const rowNames = ["Core", "Bright", "Character"];
 
+// Pick once per page load. Theme changes reuse this family and swap its roles.
+const accentFamily = families[Math.floor(Math.random() * families.length)];
+const ambientDuration = 17 + Math.random() * 8;
+const ambientDelay = -Math.random() * ambientDuration;
+const ambientDirection = Math.random() < 0.5 ? "alternate" : "alternate-reverse";
+
 const allColors = [
   ...darkNeutrals.map(([name, hex]) => ({ group: "dark", name, hex })),
   ...families.flatMap(family => family.colors.map(([name, hex]) => ({
@@ -92,13 +98,45 @@ function rgbString(hex) {
   return rgb(hex).join(", ");
 }
 
-function labelColor(hex) {
-  const [r, g, b] = rgb(hex).map(v => v / 255);
-  const linear = [r, g, b].map(v =>
-    v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4
+function relativeLuminance(hex) {
+  const linear = rgb(hex).map(value => {
+    const channel = value / 255;
+    return channel <= 0.04045
+      ? channel / 12.92
+      : ((channel + 0.055) / 1.055) ** 2.4;
+  });
+
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+}
+
+function contrastRatio(first, second) {
+  const lighter = Math.max(relativeLuminance(first), relativeLuminance(second));
+  const darker = Math.min(relativeLuminance(first), relativeLuminance(second));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function mixHex(first, second, secondWeight) {
+  const secondRgb = rgb(second);
+  const mixed = rgb(first).map((channel, index) =>
+    Math.round(channel * (1 - secondWeight) + secondRgb[index] * secondWeight)
   );
-  const l = 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
-  return l > 0.47 ? "#242424" : "#F7F3EC";
+
+  return `#${mixed.map(channel => channel.toString(16).padStart(2, "0")).join("")}`.toUpperCase();
+}
+
+function accentTextColor(accent) {
+  // One part accent to four parts neutral keeps a tint without sacrificing clarity.
+  const neutralWeight = 4 / 5;
+  const darkCandidate = mixHex(accent, "#242424", neutralWeight);
+  const lightCandidate = mixHex(accent, "#F7F3EC", neutralWeight);
+
+  return contrastRatio(darkCandidate, accent) >= contrastRatio(lightCandidate, accent)
+    ? darkCandidate
+    : lightCandidate;
+}
+
+function labelColor(hex) {
+  return relativeLuminance(hex) > 0.47 ? "#242424" : "#F7F3EC";
 }
 
 function swatch(name, hex, extraClass = "") {
@@ -330,9 +368,42 @@ const root = document.documentElement;
 const themeToggle = document.getElementById("themeToggle");
 const themeText = document.getElementById("themeText");
 const themeIcon = document.getElementById("themeIcon");
+const wordmarkLetters = document.querySelectorAll(".wordmark-letter");
+
+root.style.setProperty("--ambient-duration", `${ambientDuration.toFixed(2)}s`);
+root.style.setProperty("--ambient-delay", `${ambientDelay.toFixed(2)}s`);
+root.style.setProperty("--ambient-direction", ambientDirection);
+
+function applyWordmarkColors(theme) {
+  const shadeIndex = theme === "dark" ? 1 : 0;
+
+  wordmarkLetters.forEach((letter, index) => {
+    letter.style.setProperty("--letter-color", families[index].colors[shadeIndex][1]);
+  });
+}
+
+function applyAccent(theme) {
+  const core = accentFamily.colors[0][1];
+  const bright = accentFamily.colors[1][1];
+  const character = accentFamily.colors[2][1];
+  const isDark = theme === "dark";
+  const accent = isDark ? bright : core;
+  const familyIndex = families.indexOf(accentFamily);
+  const neighborFamily = families[(familyIndex + 1) % families.length];
+  const neighborShade = neighborFamily.colors[isDark ? 1 : 0][1];
+
+  root.style.setProperty("--accent", accent);
+  root.style.setProperty("--accent-text", accentTextColor(accent));
+  root.style.setProperty("--ambient-character", character);
+  root.style.setProperty("--ambient-neighbor", neighborShade);
+  root.dataset.accentFamily = accentFamily.name.toLowerCase();
+  root.dataset.ambientNeighbor = neighborFamily.name.toLowerCase();
+}
 
 function applyTheme(theme) {
   root.dataset.theme = theme;
+  applyAccent(theme);
+  applyWordmarkColors(theme);
   try {
     localStorage.setItem("script-preview-theme", theme);
   } catch {
@@ -356,7 +427,7 @@ try {
 } catch {
   storedTheme = null;
 }
-if (storedTheme === "light" || storedTheme === "dark") applyTheme(storedTheme);
+applyTheme(storedTheme === "light" || storedTheme === "dark" ? storedTheme : root.dataset.theme);
 
 document.getElementById("count").textContent = `${allColors.length} colours`;
 render();
