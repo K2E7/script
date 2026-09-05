@@ -28,9 +28,9 @@ const families = [
   {
     name: "Yellow",
     colors: [
-      ["script-yellow-core", "#C19C00"],
+      ["script-yellow-core", "#B88F12"],
       ["script-yellow-bright", "#F8BE98"],
-      ["script-yellow-character", "#D7B63F"]
+      ["script-yellow-character", "#C7A45B"]
     ]
   },
   {
