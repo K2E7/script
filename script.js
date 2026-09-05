@@ -22,7 +22,7 @@ const families = [
     colors: [
       ["script-red-core", "#AB5960"],
       ["script-red-bright", "#E95678"],
-      ["script-red-character", "#F08A88"]
+      ["script-red-character", "#D95D61"]
     ]
   },
   {
@@ -30,7 +30,7 @@ const families = [
     colors: [
       ["script-yellow-core", "#C19C00"],
       ["script-yellow-bright", "#F8BE98"],
-      ["script-yellow-character", "#A79677"]
+      ["script-yellow-character", "#D7B63F"]
     ]
   },
   {
