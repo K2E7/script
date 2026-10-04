@@ -431,3 +431,13 @@ applyTheme(storedTheme === "light" || storedTheme === "dark" ? storedTheme : roo
 
 document.getElementById("count").textContent = `${allColors.length} colours`;
 render();
+// Switch between editor downloads and the interactive palette.
+const collectionView = document.getElementById("collectionView");
+collectionView.addEventListener("change", () => {
+  const showPalette = collectionView.value === "palette";
+  document.getElementById("themesView").hidden = showPalette;
+  document.getElementById("paletteView").hidden = !showPalette;
+  document.getElementById("collectionDescription").textContent = showPalette
+    ? "30 colours · 6 families · 3 roles"
+    : "One palette. Two ways to make it yours.";
+});

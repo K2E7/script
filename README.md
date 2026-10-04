@@ -1,12 +1,21 @@
 # Script
 
-An interactive palette utility for the Script theme. It contains dark and light
-neutrals plus six colour families with core, bright, and character roles.
+Light and dark editor themes and an interactive colour palette for Script.
+The palette contains dark and light neutrals plus six colour families with
+core, bright, and character roles.
 
 ## Run locally
 
 Open `index.html` directly in a modern browser. No build step or dependencies
 are required.
+
+## Download editor themes
+
+The page opens with Editor themes selected. Download for Zed provides
+`script.json`, containing both Script Dark and Script Light.
+
+Use the collection dropdown to switch between Editor themes and Colour palettes.
+The light/dark preview toggle controls the page appearance.
 
 ## Use the palette
 

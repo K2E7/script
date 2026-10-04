@@ -5,12 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#121212">
-  <meta name="description" content="An interactive semantic colour palette with CSS, SCSS, JSON, and CSV exports.">
-  <title>Script — Palette Utility</title>
+  <meta name="description" content="Light and dark editor themes for Zed, plus an interactive colour palette with CSS, SCSS, JSON, and CSV exports.">
+  <title>Script — Editor Themes &amp; Colour Palette</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap">
   <script>
     try {
       const theme = localStorage.getItem("script-preview-theme");
@@ -26,15 +23,12 @@
   <main class="app">
     <header class="topbar">
       <div class="topbar-main">
-        <p class="eyebrow">K2E7 / Theme Utility</p>
+        <p class="eyebrow">K2E7 / Editor themes &amp; colour palette</p>
         <h1 class="wordmark" aria-label="Script">
           <span class="wordmark-letter" aria-hidden="true">S</span><span class="wordmark-letter" aria-hidden="true">c</span><span class="wordmark-letter" aria-hidden="true">r</span><span class="wordmark-letter" aria-hidden="true">i</span><span class="wordmark-letter" aria-hidden="true">p</span><span class="wordmark-letter" aria-hidden="true">t</span>
         </h1>
         <p class="description">
-          A semantic 6 × 3 colour system. Read it vertically by family:
-          red, yellow, green, cyan, blue, and purple. The rows move from core
-          to bright to character shades.
-        </p>
+          Colour with character, wherever you code. Download editor themes in light and dark, or explore the palette below.</p>
       </div>
 
       <button class="theme-toggle" id="themeToggle" type="button">
@@ -43,7 +37,47 @@
       </button>
     </header>
 
-    <section class="utility" aria-label="Palette utility controls">
+
+<div class="collection-heading">
+  <select id="collectionView" aria-label="Choose collection" aria-controls="themesView paletteView">
+    <option value="themes">Editor themes</option>
+    <option value="palette">Colour palettes</option>
+  </select>
+  <p id="collectionDescription">One palette. Two ways to make it yours.</p>
+</div>
+<section id="themesView" aria-label="Editor themes">
+
+  <article class="editor-card">
+    <div class="editor-card-header">
+      <div class="editor-name"><span class="editor-mark" aria-hidden="true">Z</span><div><h3>Zed</h3><p>Script Dark + Script Light · Included together</p></div></div>
+      <a class="theme-download" href="script.json" download="script.json">Download for Zed ↓</a>
+    </div>
+    <div class="preview-pair"><div class="editor-preview dark">
+  <div class="preview-bar"><span>hello.js</span><span>Script Dark</span></div>
+  <pre><span class="ln">1</span><span class="comment">// A little colour, a little character.</span>
+<span class="ln">2</span><span class="kw">const</span> theme = <span class="str">"Script"</span>;
+<span class="ln">3</span>
+<span class="ln">4</span><span class="kw">function</span> <span class="fn">greet</span>(name) {
+<span class="ln">5</span>  <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
+<span class="ln">6</span>}
+<span class="ln">7</span>
+<span class="ln">8</span>console.<span class="fn">log</span>(<span class="fn">greet</span>(theme));</pre>
+</div><div class="editor-preview light">
+  <div class="preview-bar"><span>hello.js</span><span>Script Light</span></div>
+  <pre><span class="ln">1</span><span class="comment">// A little colour, a little character.</span>
+<span class="ln">2</span><span class="kw">const</span> theme = <span class="str">"Script"</span>;
+<span class="ln">3</span>
+<span class="ln">4</span><span class="kw">function</span> <span class="fn">greet</span>(name) {
+<span class="ln">5</span>  <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
+<span class="ln">6</span>}
+<span class="ln">7</span>
+<span class="ln">8</span>console.<span class="fn">log</span>(<span class="fn">greet</span>(theme));</pre>
+</div></div>
+    <p class="card-foot">Both appearances in one theme file · script.json<br>Code previews using the Script Dark and Script Light theme colours.</p>
+  </article>
+</section>
+<section id="paletteView" aria-label="Colour palettes" hidden>
+<p class="palette-intro">Explore the colours behind Script. Copy individual tokens or export the complete palette for your own projects.</p>    <section class="utility" aria-label="Palette utility controls">
       <div class="utility-left">
         <select id="copyFormat" aria-label="Tile copy format">
           <option value="hex">Tile click: Hex only</option>
@@ -73,6 +107,7 @@
         <kbd>Alt</kbd> + click copies token only
       </span>
     </div>
+</section>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
