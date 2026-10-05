@@ -68,6 +68,7 @@ const families = [
 ];
 
 const rowNames = ["Core", "Bright", "Character"];
+const roleDescriptions = ["Paper-like colours for light mode.", "Brighter counterparts for dark mode.", "Mixed shades that give the palette its character."];
 
 // Pick once per page load. Theme changes reuse this family and swap its roles.
 const accentFamily = families[Math.floor(Math.random() * families.length)];
@@ -135,7 +136,7 @@ function accentTextColor(accent) {
 }
 
 function labelColor(hex) {
-  return relativeLuminance(hex) > 0.47 ? "#242424" : "#F7F3EC";
+  return contrastRatio(hex, "#161616") >= contrastRatio(hex, "#FFFBF2") ? "#161616" : "#FFFBF2";
 }
 
 function swatch(name, hex, extraClass = "") {
@@ -172,7 +173,7 @@ function render() {
 
   const matrixRows = rowNames.map((rowName, rowIndex) => `
     <div class="matrix-row" aria-label="${rowName} role">
-      <div class="row-label">${rowName}</div>
+      <div class="row-label"><strong>${rowName}</strong><span>${roleDescriptions[rowIndex]}</span></div>
       ${families.map(family => {
         const [name, hex] = family.colors[rowIndex];
         return swatch(name, hex, "script-swatch");
@@ -208,9 +209,10 @@ function render() {
     <section class="board-section">
       <div class="section-header">
         <h2 class="section-title">Script palette</h2>
-        <span class="section-note">6 families × 3 roles</span>
+
       </div>
 
+      <div class="mobile-role-guide">${rowNames.map((name, index) => `<p><strong>${name}</strong> — ${roleDescriptions[index]}</p>`).join("")}</div>
       <div class="matrix-wrap">
         <div class="matrix desktop-matrix" aria-label="Colours by role and family">
           ${familyHeader}
@@ -429,15 +431,26 @@ try {
 }
 applyTheme(storedTheme === "light" || storedTheme === "dark" ? storedTheme : root.dataset.theme);
 
-document.getElementById("count").textContent = `${allColors.length} colours`;
+
 render();
-// Switch between editor downloads and the interactive palette.
-const collectionView = document.getElementById("collectionView");
-collectionView.addEventListener("change", () => {
-  const showPalette = collectionView.value === "palette";
+
+const collectionButtons = document.querySelectorAll("[data-view]");
+function selectCollection(view) {
+  const showPalette = view === "palette";
   document.getElementById("themesView").hidden = showPalette;
   document.getElementById("paletteView").hidden = !showPalette;
+  collectionButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.view === view)));
   document.getElementById("collectionDescription").textContent = showPalette
     ? "30 colours · 6 families · 3 roles"
     : "One palette. Two ways to make it yours.";
+}
+collectionButtons.forEach(button => button.addEventListener("click", () => selectCollection(button.dataset.view)));
+document.getElementById("copyZedSettings").addEventListener("click", async () => {
+  const ok = await copyText(document.getElementById("zedSettings").textContent);
+  showToast(ok ? "Copied Zed settings" : "Couldn’t copy — please copy manually", !ok);
 });
+
+if (typeof ResizeObserver !== "undefined") {
+  const toolbar = document.querySelector(".utility");
+  new ResizeObserver(() => root.style.setProperty("--toolbar-height", (toolbar.getBoundingClientRect().height + 16) + "px")).observe(toolbar);
+}

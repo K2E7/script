@@ -39,10 +39,7 @@
 
 
 <div class="collection-heading">
-  <select id="collectionView" aria-label="Choose collection" aria-controls="themesView paletteView">
-    <option value="themes">Editor themes</option>
-    <option value="palette">Colour palettes</option>
-  </select>
+  <div class="collection-switch" role="group" aria-label="Choose collection"><button type="button" data-view="themes" aria-pressed="true" aria-controls="themesView">Editor themes</button><button type="button" data-view="palette" aria-pressed="false" aria-controls="paletteView">Colour palette</button></div>
   <p id="collectionDescription">One palette. Two ways to make it yours.</p>
 </div>
 <section id="themesView" aria-label="Editor themes">
@@ -55,48 +52,60 @@
     <div class="preview-pair"><div class="editor-preview dark">
   <div class="preview-bar"><span>hello.js</span><span>Script Dark</span></div>
   <pre><span class="ln">1</span><span class="comment">// A little colour, a little character.</span>
-<span class="ln">2</span><span class="kw">const</span> theme = <span class="str">"Script"</span>;
+<span class="ln">2</span><span class="kw">const</span> <span class="var">theme</span> <span class="op">=</span> <span class="str">"Script"</span>;
 <span class="ln">3</span>
-<span class="ln">4</span><span class="kw">function</span> <span class="fn">greet</span>(name) {
-<span class="ln">5</span>  <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
-<span class="ln">6</span>}
-<span class="ln">7</span>
-<span class="ln">8</span>console.<span class="fn">log</span>(<span class="fn">greet</span>(theme));</pre>
+<span class="ln">4</span><span class="kw">function</span> <span class="fn">greet</span><span class="bracket-1">(</span><span class="var">name</span><span class="bracket-1">)</span> <span class="bracket-1">{</span>
+<span class="ln">5</span>  <span class="kw">return</span> <span class="str">"Hello, "</span> <span class="op">+</span> <span class="var">name</span>;
+<span class="ln">6</span><span class="bracket-1">}</span>
+<span class="ln">7</span><span class="var">console</span>.<span class="fn">log</span><span class="bracket-1">(</span><span class="fn">greet</span><span class="bracket-2">(</span><span class="var">theme</span><span class="bracket-2">)</span><span class="bracket-1">)</span>;
+<span class="ln">8</span><span class="kw">const</span> <span class="var">nested</span> <span class="op">=</span> <span class="bracket-1">(</span><span class="bracket-2">[</span><span class="bracket-3">{</span> <span class="bracket-3">}</span><span class="bracket-2">]</span><span class="bracket-1">)</span>;</pre>
 </div><div class="editor-preview light">
   <div class="preview-bar"><span>hello.js</span><span>Script Light</span></div>
   <pre><span class="ln">1</span><span class="comment">// A little colour, a little character.</span>
-<span class="ln">2</span><span class="kw">const</span> theme = <span class="str">"Script"</span>;
+<span class="ln">2</span><span class="kw">const</span> <span class="var">theme</span> <span class="op">=</span> <span class="str">"Script"</span>;
 <span class="ln">3</span>
-<span class="ln">4</span><span class="kw">function</span> <span class="fn">greet</span>(name) {
-<span class="ln">5</span>  <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
-<span class="ln">6</span>}
-<span class="ln">7</span>
-<span class="ln">8</span>console.<span class="fn">log</span>(<span class="fn">greet</span>(theme));</pre>
+<span class="ln">4</span><span class="kw">function</span> <span class="fn">greet</span><span class="bracket-1">(</span><span class="var">name</span><span class="bracket-1">)</span> <span class="bracket-1">{</span>
+<span class="ln">5</span>  <span class="kw">return</span> <span class="str">"Hello, "</span> <span class="op">+</span> <span class="var">name</span>;
+<span class="ln">6</span><span class="bracket-1">}</span>
+<span class="ln">7</span><span class="var">console</span>.<span class="fn">log</span><span class="bracket-1">(</span><span class="fn">greet</span><span class="bracket-2">(</span><span class="var">theme</span><span class="bracket-2">)</span><span class="bracket-1">)</span>;
+<span class="ln">8</span><span class="kw">const</span> <span class="var">nested</span> <span class="op">=</span> <span class="bracket-1">(</span><span class="bracket-2">[</span><span class="bracket-3">{</span> <span class="bracket-3">}</span><span class="bracket-2">]</span><span class="bracket-1">)</span>;</pre>
 </div></div>
     <p class="card-foot">Both appearances in one theme file · script.json<br>Code previews using the Script Dark and Script Light theme colours.</p>
+    <details class="install-guide">
+      <summary>How to install</summary>
+      <ol>
+        <li>Download <code>script.json</code> and place it in your themes folder (create the folder if needed):
+          <ul><li>macOS / Linux: <code>~/.config/zed/themes/</code></li><li>Windows: <code>%APPDATA%\Zed\themes</code></li></ul>
+        </li>
+        <li>In Zed's command palette, run <code>theme selector: toggle</code> and choose <strong>Script Dark</strong> or <strong>Script Light</strong>. Restart Zed if they do not appear.</li>
+        <li>Run <code>zed: open settings file</code> and merge the settings below into your existing user settings. These follow your system appearance and enable the bracket colours.</li>
+      </ol>
+      <div class="snippet-header"><span>settings.json</span><button class="tool-button" id="copyZedSettings" type="button">Copy settings</button></div>
+      <pre class="settings-snippet"><code id="zedSettings">{
+  "theme": {
+    "mode": "system",
+    "dark": "Script Dark",
+    "light": "Script Light"
+  },
+  "colorize_brackets": true
+}</code></pre>
+      <p><a href="https://zed.dev/docs/themes">Zed theme documentation</a></p>
+    </details>
   </article>
 </section>
 <section id="paletteView" aria-label="Colour palettes" hidden>
 <p class="palette-intro">Explore the colours behind Script. Copy individual tokens or export the complete palette for your own projects.</p>    <section class="utility" aria-label="Palette utility controls">
-      <div class="utility-left">
-        <select id="copyFormat" aria-label="Tile copy format">
-          <option value="hex">Tile click: Hex only</option>
-          <option value="css">Tile click: CSS variable</option>
-          <option value="scss">Tile click: SCSS variable</option>
-          <option value="json">Tile click: JSON property</option>
-          <option value="name">Tile click: Token name</option>
-        </select>
-
-        <button class="tool-button" id="copyCss" type="button"><span class="copy-prefix">Copy </span>CSS</button>
-        <button class="tool-button" id="copyScss" type="button"><span class="copy-prefix">Copy </span>SCSS</button>
-        <button class="tool-button" id="copyJson" type="button"><span class="copy-prefix">Copy </span>JSON</button>
-        <button class="tool-button" id="copyCsv" type="button"><span class="copy-prefix">Copy </span>CSV</button>
+      <div class="tile-setting">
+        <label for="copyFormat">Click a tile to copy</label>
+        <select id="copyFormat"><option value="hex">Hex value</option><option value="css">CSS variable</option><option value="scss">SCSS variable</option><option value="json">JSON property</option><option value="name">Token name</option></select>
       </div>
-
-      <div class="utility-right">
-        <button class="tool-button primary" id="downloadCss" type="button">Download CSS</button>
-        <span class="count" id="count">30 colours</span>
-      </div>
+      <div class="export-actions" role="group" aria-label="Export all colours"><span class="toolbar-label">Export all</span><div class="export-buttons">
+        <button class="tool-button" id="copyCss" type="button" aria-label="Copy all as CSS">Copy CSS</button>
+        <button class="tool-button" id="copyScss" type="button" aria-label="Copy all as SCSS">Copy SCSS</button>
+        <button class="tool-button" id="copyJson" type="button" aria-label="Copy all as JSON">Copy JSON</button>
+        <button class="tool-button" id="copyCsv" type="button" aria-label="Copy all as CSV">Copy CSV</button>
+        <button class="tool-button" id="downloadCss" type="button">Download CSS</button>
+      </div></div>
     </section>
 
     <section class="board" id="paletteBoard" aria-label="Script colour palette"></section>
